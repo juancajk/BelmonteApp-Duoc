@@ -5,9 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.model.Viaje
-import com.example.myapplication.network.RetrofitClient
+import com.example.myapplication.data.ViajeDao
+import com.example.myapplication.data.ViajeEntity
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 sealed class SolicitudState {
     object Idle : SolicitudState()
@@ -25,20 +26,19 @@ class SolicitudViewModel : ViewModel() {
     var hora by mutableStateOf("")
     var fotoUri by mutableStateOf<String?>(null)
 
-
     var intentoEnviar by mutableStateOf(false)
         private set
 
     var state by mutableStateOf<SolicitudState>(SolicitudState.Idle)
         private set
 
-
     fun isValid(): Boolean {
         return nombre.isNotBlank() && origen.isNotBlank() &&
                 destino.isNotBlank() && fecha.isNotBlank() && hora.isNotBlank()
     }
 
-    fun enviarSolicitud() {
+
+    fun enviarSolicitud(viajeDao: ViajeDao) {
         intentoEnviar = true
 
         if (!isValid()) {
@@ -49,19 +49,27 @@ class SolicitudViewModel : ViewModel() {
         viewModelScope.launch {
             state = SolicitudState.Loading
             try {
-                val nuevoViaje = Viaje(
+
+                val nuevoViajeEntity = ViajeEntity(
+                    id = UUID.randomUUID().toString(),
                     nombrePasajero = nombre,
                     fecha = fecha,
                     hora = hora,
                     direccionOrigen = origen,
                     direccionDestino = destino,
                     numeroVuelo = vuelo.ifBlank { null },
+                    estado = "Pendiente",
                     fotoRefUri = fotoUri
                 )
-                RetrofitClient.apiService.enviarSolicitud(nuevoViaje)
+
+
+                viajeDao.insertarViaje(nuevoViajeEntity)
+
+
                 state = SolicitudState.Success
+
             } catch (e: Exception) {
-                state = SolicitudState.Error("Error al enviar: ${e.localizedMessage}")
+                state = SolicitudState.Error("Error al guardar en BD: ${e.localizedMessage}")
             }
         }
     }

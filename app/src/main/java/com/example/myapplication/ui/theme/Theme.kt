@@ -1,53 +1,82 @@
 package com.example.myapplication.ui.theme
 
 import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+/**
+ * Tema corporativo Belmonte SpA.
+ * Responsabilidad de Constanza: Diseno base con Material Design 3.
+ * - Scaffold + TopAppBar + FAB + BottomNavigation
+ * - Paleta azul marino y dorado corporativo
+ * - Soporte dark/light mode
+ */
+
+private val BelmonteLightColorScheme = lightColorScheme(
+    primary = AzulMarinoPrimary,
+    onPrimary = Color.White,
+    primaryContainer = AzulMarinoVariant,
+    onPrimaryContainer = Color.White,
+    secondary = DoradoPrimary,
+    onSecondary = TextoSobreDorado,
+    secondaryContainer = DoradoLight,
+    onSecondaryContainer = TextoPrimario,
+    tertiary = DoradoDark,
+    onTertiary = Color.White,
+    background = BackgroundLight,
+    onBackground = TextoPrimario,
+    surface = SurfaceLight,
+    onSurface = TextoPrimario,
+    surfaceVariant = Color(0xFFE7E0EC),
+    onSurfaceVariant = TextoSecundario,
+    error = Color(0xFFB3261E),
+    onError = Color.White
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val BelmonteDarkColorScheme = darkColorScheme(
+    primary = DoradoPrimary,
+    onPrimary = AzulMarinoPrimary,
+    primaryContainer = AzulMarinoLight,
+    onPrimaryContainer = DoradoLight,
+    secondary = DoradoLight,
+    onSecondary = AzulMarinoPrimary,
+    secondaryContainer = AzulMarinoVariant,
+    onSecondaryContainer = DoradoLight,
+    tertiary = DoradoLight,
+    onTertiary = AzulMarinoPrimary,
+    background = BackgroundDark,
+    onBackground = Color.White,
+    surface = SurfaceDark,
+    onSurface = Color.White,
+    surfaceVariant = AzulMarinoLight,
+    onSurfaceVariant = Color(0xFFCAC4D0),
+    error = Color(0xFFF2B8B5),
+    onError = Color(0xFF601410)
 )
 
 @Composable
 fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme = if (darkTheme) BelmonteDarkColorScheme else BelmonteLightColorScheme
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    // Ajustar barra de estado al azul marino corporativo
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = AzulMarinoPrimary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+        }
     }
 
     MaterialTheme(
