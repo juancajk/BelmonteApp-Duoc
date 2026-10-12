@@ -17,24 +17,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * ViewModel para la pantalla del conductor.
- * Responsabilidad Constanza: Gestion de viajes con MVVM + GPS en tiempo real.
- *
- * Gestiona:
- * - Lista de viajes desde Room (offline-first)
- * - Filtros por estado (Pendiente, Asignado, En Curso, Finalizado)
- * - Transiciones de estado del viaje
- * - Ubicacion GPS del conductor via FusedLocationProviderClient
- *
- * Utiliza AndroidViewModel para acceder al contexto de la app (Room + GPS).
- */
+
 class ConductorViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ViajeRepository
     private val locationHelper: LocationHelper
 
-    // === Estados reactivos (StateFlow para Compose) ===
 
     private val _viajes = MutableStateFlow<List<ViajeEntity>>(emptyList())
     val viajes: StateFlow<List<ViajeEntity>> = _viajes.asStateFlow()
@@ -65,10 +53,7 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         iniciarGps()
     }
 
-    /**
-     * Carga los datos ficticios si la base esta vacia,
-     * luego observa los viajes del dia.
-     */
+
     private fun cargarDatosIniciales() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -83,23 +68,18 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    /**
-     * Inicia el GPS del conductor usando FusedLocationProviderClient.
-     * Obtiene ubicacion inicial y luego actualizaciones en tiempo real.
-     */
+
     private fun iniciarGps() {
         if (!locationHelper.tienePermisoUbicacion()) {
             _gpsActivo.value = false
             return
         }
 
-        // Obtener ultima ubicacion conocida
         locationHelper.obtenerUltimaUbicacion { location ->
             _ubicacionConductor.value = location
             _gpsActivo.value = location != null
         }
 
-        // Iniciar tracking en tiempo real
         jobGps = viewModelScope.launch {
             locationHelper.obtenerUbicacionEnTiempoReal(intervaloMs = 15_000L)
                 .collect { location ->
@@ -109,18 +89,13 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    /**
-     * Reintenta activar el GPS (llamar despues de obtener permisos).
-     */
+
     fun reintentarGps() {
         jobGps?.cancel()
         iniciarGps()
     }
 
-    /**
-     * Calcula la distancia entre el conductor y el destino de un viaje.
-     * @return Distancia en km, o null si no hay ubicacion GPS.
-     */
+
     fun distanciaAlDestino(viaje: ViajeEntity): Double? {
         val ubicacion = _ubicacionConductor.value ?: return null
         if (viaje.latitudDestino == 0.0 && viaje.longitudDestino == 0.0) return null
@@ -130,10 +105,7 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         )
     }
 
-    /**
-     * Observa los viajes segun el filtro actual.
-     * Cancela el job anterior para evitar multiples colectores.
-     */
+
     private fun observarViajes() {
         jobObservarViajes?.cancel()
         jobObservarViajes = viewModelScope.launch {
@@ -148,18 +120,13 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    /**
-     * Cambia el filtro de estados y recarga los viajes.
-     */
+
     fun cambiarFiltro(nuevoFiltro: String) {
         _filtroActual.value = nuevoFiltro
         observarViajes()
     }
 
-    /**
-     * Actualiza el estado de un viaje siguiendo el flujo secuencial:
-     * Pendiente -> Asignado -> En Curso -> Finalizado
-     */
+
     fun avanzarEstado(viaje: ViajeEntity) {
         val nuevoEstado = when (viaje.estado) {
             "Pendiente" -> "Asignado"
@@ -178,9 +145,7 @@ class ConductorViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    /**
-     * Permite retroceder el estado de un viaje (por error del conductor).
-     */
+
     fun retrocederEstado(viaje: ViajeEntity) {
         val nuevoEstado = when (viaje.estado) {
             "Asignado" -> "Pendiente"

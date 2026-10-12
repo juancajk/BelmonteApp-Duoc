@@ -16,14 +16,7 @@ import com.example.myapplication.view.SplashScreen
 import com.example.myapplication.viewmodel.ConductorViewModel
 import com.example.myapplication.viewmodel.SolicitudViewModel
 
-/**
-- Navegacion principal de la aplicacion Belmonte SpA.
-- Responsabilidad compartida:
-- Flujo Pasajero: Splash -> Onboarding -> SeleccionRol -> Solicitud (Juan Carlos)
-- Flujo Conductor: SeleccionRol -> LoginConductor -> RutasConductor (Constanza)
- *
-- La pantalla SeleccionRol integra ambos flujos en un punto comun.
- */
+
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -31,10 +24,8 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.SPLASH
+        startDestination = Routes.LOGIN_CONDUCTOR
     ) {
-
-
 
         composable(Routes.SPLASH) {
             SplashScreen(
@@ -56,7 +47,6 @@ fun AppNavigation() {
             )
         }
 
-
         composable(Routes.SELECCION_ROL) {
             SeleccionRolScreen(
                 onSeleccionarPasajero = {
@@ -69,12 +59,9 @@ fun AppNavigation() {
         }
 
 
-
         composable(Routes.SOLICITUD) {
-            SolicitudScreen(viewModel = solicitudViewModel, navController = navController)
+            SolicitudScreen(viewModel = solicitudViewModel)
         }
-
-
 
         composable(Routes.LOGIN_CONDUCTOR) {
             LoginConductorScreen(
@@ -90,7 +77,6 @@ fun AppNavigation() {
             val conductorViewModel: ConductorViewModel = viewModel()
             RutasConductorScreen(viewModel = conductorViewModel)
         }
-
 
 
         composable(Routes.LOGIN) {

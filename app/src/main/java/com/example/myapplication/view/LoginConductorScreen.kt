@@ -49,15 +49,6 @@ import com.example.myapplication.ui.theme.DoradoPrimary
 import com.example.myapplication.ui.theme.EstadoEnCurso
 import com.example.myapplication.ui.theme.EstadoPendiente
 
-/**
- * Pantalla de login para el conductor con solicitud de permiso GPS.
- * Responsabilidad Constanza: Autenticacion conductor + permisos GPS.
- *
- * Solicita ACCESS_FINE_LOCATION y ACCESS_COARSE_LOCATION al entrar,
- * necesarios para FusedLocationProviderClient en el panel del conductor.
- *
- * Credenciales ficticias: conductor / 123 (MVP educativo).
- */
 @Composable
 fun LoginConductorScreen(
     onLoginSuccess: () -> Unit
@@ -68,7 +59,6 @@ fun LoginConductorScreen(
     var error by remember { mutableStateOf<String?>(null) }
     var gpsPermitido by remember { mutableStateOf(false) }
 
-    // Launcher para solicitar permisos de ubicacion
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permisos ->
@@ -80,7 +70,6 @@ fun LoginConductorScreen(
         }
     }
 
-    // Solicitar permiso GPS al entrar a la pantalla
     LaunchedEffect(Unit) {
         locationPermissionLauncher.launch(
             arrayOf(
@@ -111,7 +100,7 @@ fun LoginConductorScreen(
                 modifier = Modifier.padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Icono conductor
+
                 Icon(
                     imageVector = Icons.Default.DirectionsCar,
                     contentDescription = null,
@@ -136,7 +125,7 @@ fun LoginConductorScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Campo usuario
+
                 OutlinedTextField(
                     value = usuario,
                     onValueChange = { usuario = it; error = null },
@@ -147,7 +136,7 @@ fun LoginConductorScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Campo password
+
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it; error = null },
@@ -157,7 +146,7 @@ fun LoginConductorScreen(
                     visualTransformation = PasswordVisualTransformation()
                 )
 
-                // Mensaje de error
+
                 error?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -169,7 +158,7 @@ fun LoginConductorScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Indicador GPS
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
@@ -190,10 +179,9 @@ fun LoginConductorScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Boton login
+
                 Button(
                     onClick = {
-                        // Credenciales ficticias para el conductor (MVP educativo)
                         if (usuario == "conductor" && password == "123") {
                             onLoginSuccess()
                         } else {

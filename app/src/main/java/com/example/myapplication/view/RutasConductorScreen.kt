@@ -115,7 +115,6 @@ fun RutasConductorScreen(viewModel: ConductorViewModel) {
                                 color = DoradoPrimary
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            // Indicador GPS en TopAppBar
                             Icon(
                                 imageVector = if (gpsActivo) Icons.Default.GpsFixed else Icons.Default.GpsOff,
                                 contentDescription = if (gpsActivo) "GPS activo" else "GPS inactivo",
@@ -158,16 +157,13 @@ fun RutasConductorScreen(viewModel: ConductorViewModel) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // === Filtros por Estado ===
             FiltrosEstado(
                 filtroActual = filtroActual,
                 onFiltroSeleccionado = { viewModel.cambiarFiltro(it) }
             )
 
-            // === Resumen Rapido ===
             ResumenViajes(viajes)
 
-            // === Lista de Viajes ===
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = DoradoPrimary)
@@ -209,7 +205,6 @@ fun RutasConductorScreen(viewModel: ConductorViewModel) {
         }
     }
 }
-
 
 @Composable
 fun FiltrosEstado(filtroActual: String, onFiltroSeleccionado: (String) -> Unit) {
@@ -281,10 +276,7 @@ fun ContadorEstado(label: String, cantidad: Int, color: Color) {
     }
 }
 
-/**
- * Tarjeta individual de un viaje con informacion detallada,
- * distancia GPS en tiempo real y botones de accion.
- */
+
 @Composable
 fun TarjetaViaje(
     viaje: ViajeEntity,
@@ -336,7 +328,7 @@ fun TarjetaViaje(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Pasajero
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Person, contentDescription = null, tint = AzulMarinoVariant, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(8.dp))
@@ -349,7 +341,7 @@ fun TarjetaViaje(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Fecha y Hora
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Schedule, contentDescription = null, tint = DoradoDark, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
@@ -360,7 +352,7 @@ fun TarjetaViaje(
                 )
             }
 
-            // Vuelo (si aplica)
+
             viaje.numeroVuelo?.let { vuelo ->
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -376,7 +368,7 @@ fun TarjetaViaje(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Origen
+
             Row(verticalAlignment = Alignment.Top) {
                 Icon(Icons.Default.MyLocation, contentDescription = null, tint = EstadoEnCurso, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
@@ -393,7 +385,7 @@ fun TarjetaViaje(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Destino
+
             Row(verticalAlignment = Alignment.Top) {
                 Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFFE53935), modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
@@ -408,7 +400,7 @@ fun TarjetaViaje(
                 }
             }
 
-            // Distancia GPS (si disponible)
+
             distanciaKm?.let { km ->
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -424,7 +416,6 @@ fun TarjetaViaje(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

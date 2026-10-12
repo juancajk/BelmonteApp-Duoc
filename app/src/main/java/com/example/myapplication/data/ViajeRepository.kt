@@ -3,19 +3,10 @@ package com.example.myapplication.data
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-/**
- * Repositorio que abstrae el acceso a datos de viajes.
- * Responsabilidad Constanza: Capa intermedia entre ViewModel y Room DAO.
- *
- * Centraliza operaciones de Room y en el futuro podria
- * sincronizar con la API REST de Spring Boot (Parte 1 - Juan Carlos).
- *
- * Cumplimiento normativo: Todos los datos son ficticios/sinteticos
- * segun Ley 21.719 y Ley 19.628. No se usan datos reales.
- */
+
 class ViajeRepository(private val viajeDao: ViajeDao) {
 
-    // === Flujos reactivos (Flow) ===
+
     fun obtenerTodosLosViajes(): Flow<List<ViajeEntity>> =
         viajeDao.obtenerTodosLosViajes()
 
@@ -25,7 +16,7 @@ class ViajeRepository(private val viajeDao: ViajeDao) {
     fun obtenerViajesDelDia(fechaHoy: String): Flow<List<ViajeEntity>> =
         viajeDao.obtenerViajesDelDia(fechaHoy)
 
-    // === Operaciones suspendidas ===
+
     suspend fun obtenerViajePorId(id: String): ViajeEntity? =
         viajeDao.obtenerViajePorId(id)
 
@@ -47,15 +38,7 @@ class ViajeRepository(private val viajeDao: ViajeDao) {
     suspend fun contarTotal(): Int =
         viajeDao.contarTotal()
 
-    /**
-     * Carga datos ficticios de prueba para demostracion del MVP.
-     * Solo inserta si la base de datos esta vacia (evita duplicados).
-     *
-     * NOTA: Cumple con el requisito obligatorio del curso DSY1105:
-     * "El desafio se desarrollara con datos ficticios, sinteticos,
-     * agregados, o publicos debidamente anonimizados."
-     * Todos los nombres, direcciones y vuelos son inventados.
-     */
+
     suspend fun cargarDatosFicticios() {
         // Solo cargar si la BD esta vacia
         val total = viajeDao.contarTotal()

@@ -12,7 +12,7 @@ interface ApiService {
 }
 
 object RetrofitClient {
-    private const val BASE_URL = "https://tu-backend-springboot.com" // Luego cambiaremos esto por la IP real
+    private const val BASE_URL = "https://tu-backend-springboot.com"
 
     val apiService: ApiService by lazy {
         Retrofit.Builder()

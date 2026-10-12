@@ -22,9 +22,7 @@ class LocationHelper(private val context: Context) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
-    /**
-     * Verifica si los permisos de ubicacion estan concedidos.
-     */
+
     fun tienePermisoUbicacion(): Boolean {
         return ContextCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_FINE_LOCATION
@@ -33,7 +31,6 @@ class LocationHelper(private val context: Context) {
             context, Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
-
 
     fun obtenerUltimaUbicacion(onResult: (Location?) -> Unit) {
         if (!tienePermisoUbicacion()) {
@@ -53,7 +50,6 @@ class LocationHelper(private val context: Context) {
             onResult(null)
         }
     }
-
 
     fun obtenerUbicacionEnTiempoReal(intervaloMs: Long = 10_000L): Flow<Location> = callbackFlow {
         if (!tienePermisoUbicacion()) {
@@ -92,13 +88,12 @@ class LocationHelper(private val context: Context) {
         }
     }
 
-
     fun calcularDistanciaKm(
         latOrigen: Double, lngOrigen: Double,
         latDestino: Double, lngDestino: Double
     ): Double {
         val resultado = FloatArray(1)
         Location.distanceBetween(latOrigen, lngOrigen, latDestino, lngDestino, resultado)
-        return resultado[0].toDouble() / 1000.0 // Metros a kilometros
+        return resultado[0].toDouble() / 1000.0
     }
 }
