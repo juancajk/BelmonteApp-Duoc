@@ -1,0 +1,12 @@
+
+Otras decisiones técnicas relevantes
+
+Gestión de Proyecto y Control de Versiones:
+
+- Se utilizo un tablero de Jira para asignar las tareas
+
+- Se utiliza este GitHub para integrar el código de ambos integrantes mediante ramas de desarrollo (branches). 
+
+- Proyecto de distribución de tareas del equipo en JIRA (link de enlace):
+https://proyectobelmonte.atlassian.net/jira/core/projects/PRO/list?jql=project%20%3D%20PRO%20ORDER%20BY%20cf%5B10019%5D%20ASC
+
