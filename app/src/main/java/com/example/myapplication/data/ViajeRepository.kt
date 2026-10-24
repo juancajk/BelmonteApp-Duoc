@@ -7,22 +7,29 @@ class ViajeRepository(
 ) {
     fun obtenerTodosLosViajes(): Flow<List<ViajeEntity>> =
         viajeDao.obtenerTodosLosViajes()
+
     fun obtenerViajesPorEstado(estado: String): Flow<List<ViajeEntity>> =
         viajeDao.obtenerViajesPorEstado(estado)
 
     fun obtenerViajesDelDia(fechaHoy: String): Flow<List<ViajeEntity>> =
         viajeDao.obtenerViajesDelDia(fechaHoy)
 
+    fun obtenerViajesPendientes(): Flow<List<ViajeEntity>> =
+        viajeDao.obtenerViajesPendientes()
 
     suspend fun obtenerViajePorId(id: String): ViajeEntity? =
         viajeDao.obtenerViajePorId(id)
+
     suspend fun insertarViaje(viaje: ViajeEntity) {
         viajeDao.insertarViaje(viaje)
     }
+
     suspend fun insertarViajes(viajes: List<ViajeEntity>) =
         viajeDao.insertarViajes(viajes)
+
     suspend fun actualizarViaje(viaje: ViajeEntity) =
         viajeDao.actualizarViaje(viaje)
+
     suspend fun eliminarViaje(viaje: ViajeEntity) =
         viajeDao.eliminarViaje(viaje)
 
@@ -30,6 +37,9 @@ class ViajeRepository(
         viajeDao.actualizarEstado(viajeId, nuevoEstado)
         return true
     }
+
+    suspend fun asignarViaje(viajeId: String) =
+        viajeDao.asignarViaje(viajeId)
 
     suspend fun sincronizarDesdeApi(): Boolean {
         return false
@@ -40,6 +50,9 @@ class ViajeRepository(
 
     suspend fun contarTotal(): Int =
         viajeDao.contarTotal()
+
+    suspend fun contarPorEstado(estado: String): Int =
+        viajeDao.contarPorEstado(estado)
 
     suspend fun cargarDatosFicticios() {
         val total = viajeDao.contarTotal()

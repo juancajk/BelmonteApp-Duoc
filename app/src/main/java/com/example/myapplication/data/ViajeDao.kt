@@ -1,6 +1,7 @@
 package com.example.myapplication.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -43,7 +44,7 @@ interface ViajeDao {
     @Query("SELECT COUNT(*) FROM viajes")
     suspend fun contarTotal(): Int
 
-    @androidx.room.Delete
+    @Delete
     suspend fun eliminarViaje(viaje: ViajeEntity)
 
     @Query("SELECT * FROM viajes WHERE estado = 'Pendiente'")
@@ -51,5 +52,4 @@ interface ViajeDao {
 
     @Query("UPDATE viajes SET estado = 'Asignado' WHERE id = :viajeId")
     suspend fun asignarViaje(viajeId: String)
-
 }

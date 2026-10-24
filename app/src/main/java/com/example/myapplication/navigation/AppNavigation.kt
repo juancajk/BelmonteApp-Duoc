@@ -5,7 +5,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.view.AdministradorScreen
+import com.example.myapplication.view.EscanerQRScreen
 import com.example.myapplication.view.HomeScreen
+import com.example.myapplication.view.LoginAdministradorScreen
 import com.example.myapplication.view.LoginConductorScreen
 import com.example.myapplication.view.LoginScreen
 import com.example.myapplication.view.OnboardingScreen
@@ -15,6 +18,7 @@ import com.example.myapplication.view.SolicitudScreen
 import com.example.myapplication.view.SplashScreen
 import com.example.myapplication.viewmodel.ConductorViewModel
 import com.example.myapplication.viewmodel.SolicitudViewModel
+import com.example.myapplication.viewmodel.AdministradorViewModel
 
 @Composable
 fun AppNavigation() {
@@ -52,6 +56,22 @@ fun AppNavigation() {
                 },
                 onSeleccionarConductor = {
                     navController.navigate(Routes.LOGIN_CONDUCTOR)
+                },
+                onSeleccionarAdministrador = {
+                    navController.navigate("login_admin")
+                }
+            )
+        }
+
+        composable("login_admin") {
+            LoginAdministradorScreen(
+                onLoginSuccess = {
+                    navController.navigate("administrador") {
+                        popUpTo("login_admin") { inclusive = true }
+                    }
+                },
+                onVolver = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -93,6 +113,17 @@ fun AppNavigation() {
             )
         }
 
-        composable(Routes.HOME) { HomeScreen() }
+        composable(Routes.HOME) {
+            HomeScreen()
+        }
+
+        composable(Routes.ESCANER_QR) {
+            EscanerQRScreen(navController = navController)
+        }
+
+        composable("administrador") {
+            val adminViewModel: AdministradorViewModel = viewModel()
+            AdministradorScreen(navController = navController, viewModel = adminViewModel)
+        }
     }
 }

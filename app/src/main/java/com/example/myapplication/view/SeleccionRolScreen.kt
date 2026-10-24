@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +38,8 @@ import com.example.myapplication.ui.theme.DoradoPrimary
 @Composable
 fun SeleccionRolScreen(
     onSeleccionarPasajero: () -> Unit,
-    onSeleccionarConductor: () -> Unit
+    onSeleccionarConductor: () -> Unit,
+    onSeleccionarAdministrador: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -103,6 +105,16 @@ fun SeleccionRolScreen(
                 icono = Icons.Default.DirectionsCar,
                 colorIcono = DoradoPrimary,
                 onClick = onSeleccionarConductor
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            RolCard(
+                titulo = "Soy Administrador",
+                descripcion = "Gestión de solicitudes",
+                icono = Icons.Default.Settings,
+                colorIcono = DoradoPrimary,
+                onClick = onSeleccionarAdministrador
             )
 
             Spacer(modifier = Modifier.height(32.dp))

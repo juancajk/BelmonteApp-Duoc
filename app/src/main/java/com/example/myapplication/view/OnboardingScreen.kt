@@ -1,165 +1,61 @@
 package com.example.myapplication.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import com.example.myapplication.R
-import com.example.myapplication.ui.theme.AzulMarinoPrimary
-import com.example.myapplication.ui.theme.DoradoPrimary
-import com.example.myapplication.ui.theme.DoradoDark
-import com.example.myapplication.ui.theme.NaranjoPrimary
 
-@Composable
-fun SplashScreen(onSplashFinished: () -> Unit) {
-    LaunchedEffect(Unit) {
-        delay(2000)
-        onSplashFinished()
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AzulMarinoPrimary),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_duoc),
-            contentDescription = "Logo Duoc"
-        )
-    }
-}
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(onNavigateToForm: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.flota1),
-            contentDescription = "Fondo Belmonte",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+    val pagerState = rememberPagerState(pageCount = { 3 })
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(alpha = 0.5f),
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.9f)
-                        )
-                    )
-                )
-        )
+    Column(modifier = Modifier.fillMaxSize()) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f)
+        ) { page ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 40.dp)
-            ) {
-                Text(
-                    text = "Belmonte",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        fontSize = 48.sp
-                    ),
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Box(
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    DoradoDark,
-                                    DoradoPrimary,
-                                    DoradoDark
-                                )
-                            ),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = DoradoPrimary.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .padding(horizontal = 24.dp, vertical = 8.dp)
-                ) {
-                    Text(
-                        text = "TRASLADOS CORPORATIVOS",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            color = Color.White,
-                            letterSpacing = 3.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        textAlign = TextAlign.Center
-                    )
-                }
+            val imagenActual = when (page) {
+                0 -> R.drawable.flota1
+                1 -> R.drawable.flota2
+                else -> R.drawable.flota3
             }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
 
-                Button(
-                    onClick = onNavigateToForm,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DoradoPrimary,
-                        contentColor = Color.Black
-                    ),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text(
-                        text = "Ingresar",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Plataforma Interna de Movilidad",
-                    color = Color.White.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.labelSmall
+                Image(
+                    painter = painterResource(id = imagenActual),
+                    contentDescription = "Imagen de la flota $page",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
             }
         }
+
+        Button(
+            onClick = onNavigateToForm,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
+                .height(50.dp)
+        ) {
+            Text("Comenzar Solicitud")
+        }
     }
 }
-
